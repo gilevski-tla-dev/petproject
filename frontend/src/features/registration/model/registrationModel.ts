@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { registerUser } from "../api/registrationApi";
 
-interface UserData {
+export interface UserData {
   name: string;
   email: string;
   password: string;

@@ -5,7 +5,6 @@ import (
 	"backend/routes"
 )
 
-// @title	MAIN API
 func main() {
 	db := config.DBConnect()
 	r := routes.SetupRoutes(db)

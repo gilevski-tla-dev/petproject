@@ -1,10 +1,5 @@
 import axios from "axios";
-
-interface UserData {
-  name: string;
-  email: string;
-  password: string;
-}
+import { UserData } from "../model/registrationModel";
 
 export const registerUser = async (userData: UserData) => {
   try {

@@ -4,7 +4,7 @@ import { RegistrationForm } from "../../widgets/RegistrationForm";
 const RegistrationPage = () => {
   return (
     <div className="flex flex-col md:flex-row h-screen w-screen">
-      <div className="flex min-h-[90vh] w-full md:h-full md:w-2/3">
+      <div className="flex min-h-[90vh] w-full md:h-full md:w-2/3 shadow-3xl z-10">
         <RegistrationForm />
       </div>
       <div className="flex h-full w-full md:w-1/3">
