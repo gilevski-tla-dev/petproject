@@ -17,7 +17,13 @@ func SignUp(db *gorm.DB) gin.HandlerFunc {
 		}
 
 		if !utils.IsValidEmail(input.Email) {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid Email"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Некорректный Email"})
+			return
+		}
+
+		var existingUser models.User
+		if err := db.Where("email = ?", input.Email).First(&existingUser).Error; err == nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Пользователь уже существует"})
 			return
 		}
 

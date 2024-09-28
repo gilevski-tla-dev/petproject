@@ -1,14 +1,20 @@
-import axios from "axios";
-import { UserData } from "../model/registrationModel";
+import axios, { AxiosError } from "axios";
+import { User } from "../models/userModel";
+import { API_BASE_URL } from "../../apiConfig";
 
-export const registerUser = async (userData: UserData) => {
+interface ApiError {
+  error: string;
+}
+
+export const registerUser = async (userData: User) => {
   try {
-    const response = await axios.post(
-      "http://localhost:3001/api/sign_up",
-      userData
-    );
+    const response = await axios.post(`${API_BASE_URL}/sign_up`, userData);
     return response.data;
-  } catch {
-    throw new Error("Registration failed");
+  } catch (error) {
+    const axiosError = error as AxiosError<ApiError>;
+
+    const errorMessage =
+      axiosError.response?.data?.error || "Ошибка регистрации";
+    throw new Error(errorMessage);
   }
 };

@@ -1,19 +1,41 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useRegistration } from "../../features/registration/model/registrationModel";
 import { Button } from "../../shared/ui/button";
+import { Link } from "../../shared/ui/link";
 import { InputWithLabel } from "../../shared/ui/input";
+import { registerUser } from "../../features/registration/api/registrationApi";
+import { User } from "../../features/registration/models/userModel";
 
 export const RegistrationForm = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { register, loading, error } = useRegistration();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const userData = { name: username, email, password };
-    await register(userData);
+
+    if (!username || !email || !password) {
+      setError("Все поля обязательны к заполнению");
+      return;
+    }
+
+    const userData: User = { username, email, password };
+    setLoading(true);
+    setError(null);
+
+    try {
+      const data = await registerUser(userData);
+      console.log(data);
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("Ошибка регистрации");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
