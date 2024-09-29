@@ -3,7 +3,7 @@ import { Button } from "../../shared/ui/button";
 import { Link } from "../../shared/ui/link";
 import { InputWithLabel } from "../../shared/ui/input";
 import { registerUser } from "../../features/registration/api/registrationApi";
-import { User } from "../../features/registration/models/userModel";
+import { User } from "../../entities/userModel";
 
 export const RegistrationForm = () => {
   const [username, setUsername] = useState("");

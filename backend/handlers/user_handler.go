@@ -53,12 +53,12 @@ func SignIn(db *gorm.DB) gin.HandlerFunc {
 
 		var user models.User
 		if err := db.Where("email = ?", input.Email).First(&user).Error; err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Неверная почта или пароль"})
 			return
 		}
 
 		if !utils.CheckPasswordHash(input.Password, user.Password) {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Неверная почта или пароль"})
 			return
 		}
 

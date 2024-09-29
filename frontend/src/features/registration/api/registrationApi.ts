@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { User } from "../models/userModel";
+import { User } from "../../../entities/userModel";
 import { API_BASE_URL } from "../../apiConfig";
 
 interface ApiError {
