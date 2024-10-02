@@ -8,6 +8,24 @@ import (
 	"net/http"
 )
 
+func GetProfile(db *gorm.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		email, exists := c.Get("email")
+		if !exists {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Не удалось получить email из токена"})
+			return
+		}
+
+		var user models.User
+		if err := db.Where("email = ?", email).First(&user).Error; err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Пользователь не найден"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"user": user})
+	}
+}
+
 func SignUp(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var input models.User
@@ -62,6 +80,12 @@ func SignIn(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{"message": "Sign in successful"})
+		token, err := utils.GenerateJWT(user.Email)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Не удалось создать токен"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "Sign in successful", "token": token})
 	}
 }

@@ -6,7 +6,7 @@ import { registerUser } from "../../features/registration/api/registrationApi";
 import { User } from "../../entities/userModel";
 
 export const RegistrationForm = () => {
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -15,12 +15,12 @@ export const RegistrationForm = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!username || !email || !password) {
+    if (!name || !email || !password) {
       setError("Все поля обязательны к заполнению");
       return;
     }
 
-    const userData: User = { username, email, password };
+    const userData: User = { name, email, password };
     setLoading(true);
     setError(null);
 
@@ -51,8 +51,8 @@ export const RegistrationForm = () => {
         </p>
         <InputWithLabel
           initialLabel="Имя пользователя"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
         <InputWithLabel
           initialLabel="Email"
