@@ -22,7 +22,11 @@ func GetProfile(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{"user": user})
+		c.JSON(http.StatusOK, gin.H{
+			"id":       user.ID,
+			"email":    user.Email,
+			"username": user.Name,
+		})
 	}
 }
 
