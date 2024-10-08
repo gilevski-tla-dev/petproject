@@ -1,3 +1,4 @@
+import React from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -7,20 +8,28 @@ import {
 import { RegistrationPage } from "../../pages/Registration";
 import { LoginPage } from "../../pages/Login";
 import ProtectedRoute from "./ProtectedRoute";
-import { HomePage } from "../../pages/Home";
+import { Layout } from "../../pages/Layout";
+import { ProfilePage } from "../../pages/Profile";
 
-export const AppRouter = () => {
+export const AppRouter: React.FC = () => {
   return (
     <Router>
       <Routes>
         <Route path="/registration" element={<RegistrationPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<Navigate to="/registration" />} />
+
+        {/* Защищённые маршруты внутри HomePage */}
         <Route
-          path="/home"
+          path="/feed/*"
           element={
             <ProtectedRoute>
-              <HomePage />
+              <Layout>
+                <Routes>
+                  <Route path="profile" element={<ProfilePage />} />
+                  {/* Можно добавить и другие защищённые маршруты */}
+                </Routes>
+              </Layout>
             </ProtectedRoute>
           }
         />
