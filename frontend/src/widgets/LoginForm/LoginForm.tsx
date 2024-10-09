@@ -31,7 +31,7 @@ const LoginForm = () => {
     try {
       const data = await loginUser(userData);
       dispatch(login(data.token)); // Сохранить токен в Redux
-      navigate("/home"); // Перейти на защищенную страницу
+      navigate("/feed"); // Перейти на защищенную страницу
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
@@ -53,6 +53,7 @@ const LoginForm = () => {
 
         <InputWithLabel
           initialLabel="Email"
+          type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />

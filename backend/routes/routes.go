@@ -18,6 +18,7 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 		api.POST("/sign_up", handlers.SignUp(db))
 		api.POST("/sign_in", handlers.SignIn(db))
 		api.GET("/profile", middleware.AuthMiddleware(), handlers.GetProfile(db))
+		api.POST("/validate_token", handlers.ValidateToken(db))
 	}
 	return r
 }
