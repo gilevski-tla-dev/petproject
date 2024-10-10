@@ -8,28 +8,6 @@ import (
 	"net/http"
 )
 
-func GetProfile(db *gorm.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		email, exists := c.Get("email")
-		if !exists {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Не удалось получить email из токена"})
-			return
-		}
-
-		var user models.User
-		if err := db.Where("email = ?", email).First(&user).Error; err != nil {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Пользователь не найден"})
-			return
-		}
-
-		c.JSON(http.StatusOK, gin.H{
-			"id":       user.ID,
-			"email":    user.Email,
-			"username": user.Name,
-		})
-	}
-}
-
 func SignUp(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var input models.User
@@ -84,12 +62,23 @@ func SignIn(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		token, err := utils.GenerateJWT(user.Email)
+		// Token generating
+
+		accessToken, err := utils.GenerateAccessToken(user.ID)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Не удалось создать токен"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate access token"})
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{"message": "Sign in successful", "token": token})
+		refreshToken, err := utils.GenerateRefreshToken(user.ID)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate refresh token"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"accessToken":  accessToken,
+			"refreshToken": refreshToken,
+		})
 	}
 }
