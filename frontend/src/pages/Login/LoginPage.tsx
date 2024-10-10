@@ -1,5 +1,5 @@
 import { InfoWidget } from "../../widgets/InfoWidget";
-import LoginForm from "../../widgets/LoginForm/LoginForm";
+import { LoginForm } from "../../widgets/LoginForm";
 
 export const LoginPage = () => {
   return (

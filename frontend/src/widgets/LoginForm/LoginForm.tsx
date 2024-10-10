@@ -4,16 +4,13 @@ import { InputWithLabel } from "../../shared/ui/input";
 import { Link } from "../../shared/ui/link";
 import { User } from "../../entities/userModel";
 import { loginUser } from "../../features/authorization/api/authorizationApi";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../features/authorization/authSlice";
 
-const LoginForm = () => {
+export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -30,8 +27,8 @@ const LoginForm = () => {
 
     try {
       const data = await loginUser(userData);
-      dispatch(login(data.token)); // Сохранить токен в Redux
-      navigate("/home"); // Перейти на защищенную страницу
+      console.log(data);
+      navigate("/feed"); // Перейти на защищенную страницу
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
@@ -71,5 +68,3 @@ const LoginForm = () => {
     </div>
   );
 };
-
-export default LoginForm;

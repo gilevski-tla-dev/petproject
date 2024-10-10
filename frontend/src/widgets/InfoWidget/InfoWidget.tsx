@@ -23,5 +23,3 @@ export const InfoWidget = () => {
     </div>
   );
 };
-
-export default InfoWidget;
