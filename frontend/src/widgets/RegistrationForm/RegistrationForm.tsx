@@ -15,6 +15,7 @@ export const RegistrationForm = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
+    console.log("hello");
     if (!name || !email || !password) {
       setError("Все поля обязательны к заполнению");
       return;
