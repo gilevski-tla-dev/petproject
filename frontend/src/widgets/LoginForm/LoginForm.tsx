@@ -4,40 +4,38 @@ import { InputWithLabel } from "../../shared/ui/input";
 import { Link } from "../../shared/ui/link";
 import { User } from "../../entities/userModel";
 import { loginUser } from "../../features/authorization/api/authorizationApi";
+import { useMutation } from "@tanstack/react-query";
+
 import { useNavigate } from "react-router-dom";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
   const navigate = useNavigate();
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const { mutate, isLoading } = useMutation(loginUser, {
+    onSuccess: (data) => {
+      navigate("/feed");
+      localStorage.setItem("accessToken", data.accessToken);
+
+      localStorage.setItem("refreshToken", data.refreshToken);
+    },
+    onError: () => {
+      alert("Неверная почта или пароль");
+    },
+  });
+
+  const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
     if (!email || !password) {
-      setError("Все поля обязательны к заполнению");
-      return;
+      return alert("Все поля обязательны к заполнению");
     }
 
     const userData: User = { email, password };
-    setLoading(true);
-    setError(null);
+    mutate(userData);
 
-    try {
-      const data = await loginUser(userData);
-      console.log(data);
-      navigate("/feed"); // Перейти на защищенную страницу
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError("Ошибка регистрации");
-      }
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
@@ -59,10 +57,9 @@ export const LoginForm = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button type="submit" disabled={loading}>
+        <Button type="submit" disabled={isLoading}>
           Войти
         </Button>
-        {error && <p className="text-red-500">{error}</p>}
         <Link to="/registration">Еще нет аккаунта? Зарегистрироваться</Link>
       </form>
     </div>

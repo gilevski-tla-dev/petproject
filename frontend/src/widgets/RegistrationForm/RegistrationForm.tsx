@@ -2,41 +2,33 @@ import { useState } from "react";
 import { Button } from "../../shared/ui/button";
 import { Link } from "../../shared/ui/link";
 import { InputWithLabel } from "../../shared/ui/input";
+import { useMutation } from "@tanstack/react-query";
 import { registerUser } from "../../features/registration/api/registrationApi";
 import { User } from "../../entities/userModel";
+import { useNavigate } from "react-router-dom";
 
 export const RegistrationForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const { mutate, isLoading, isError, error } = useMutation(registerUser, {
+    onSuccess: () => {
+      navigate("/login");
+    },
+  });
+
+  const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
     console.log("hello");
     if (!name || !email || !password) {
-      setError("Все поля обязательны к заполнению");
-      return;
+      return alert("Все поля обязательны к заполнению");
     }
 
     const userData: User = { name, email, password };
-    setLoading(true);
-    setError(null);
-
-    try {
-      const data = await registerUser(userData);
-      console.log(data);
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError("Ошибка регистрации");
-      }
-    } finally {
-      setLoading(false);
-    }
+    mutate(userData);
   };
 
   return (
@@ -67,10 +59,10 @@ export const RegistrationForm = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button type="submit" disabled={loading}>
-          {loading ? "Регистрация..." : "Зарегистрироваться"}
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? "Регистрация..." : "Зарегистрироваться"}
         </Button>
-        {error && <p className="text-red-500">{error}</p>}
+        {isError && <p className="text-red-500">{(error as Error).message}</p>}
         <Link to="/login">Уже есть аккаунт? Войти...</Link>
       </form>
     </div>
