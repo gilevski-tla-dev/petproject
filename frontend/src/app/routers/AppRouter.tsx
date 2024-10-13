@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import { RegistrationPage } from "../../pages/Registration";
 import { LoginPage } from "../../pages/Login";
-import ProtectedRoute from "./ProtectedRoute";
 import { Layout } from "../../pages/Layout";
 import { ProfilePage } from "../../pages/Profile";
 
@@ -23,14 +22,12 @@ export const AppRouter: React.FC = () => {
         <Route
           path="/feed/*"
           element={
-            <ProtectedRoute>
-              <Layout>
-                <Routes>
-                  <Route path="profile" element={<ProfilePage />} />
-                  {/* Можно добавить и другие защищённые маршруты */}
-                </Routes>
-              </Layout>
-            </ProtectedRoute>
+            <Layout>
+              <Routes>
+                <Route path="profile" element={<ProfilePage />} />
+                {/* Можно добавить и другие защищённые маршруты */}
+              </Routes>
+            </Layout>
           }
         />
       </Routes>
