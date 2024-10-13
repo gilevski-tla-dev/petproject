@@ -5,11 +5,13 @@ import { Link } from "../../shared/ui/link";
 import { User } from "../../entities/userModel";
 import { loginUser } from "../../features/authorization/api/authorizationApi";
 import { useMutation } from "@tanstack/react-query";
+
 import { useNavigate } from "react-router-dom";
 
-const LoginForm = () => {
+export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
 
   const { mutate, isLoading } = useMutation(loginUser, {
@@ -33,6 +35,7 @@ const LoginForm = () => {
 
     const userData: User = { email, password };
     mutate(userData);
+
   };
 
   return (
@@ -62,5 +65,3 @@ const LoginForm = () => {
     </div>
   );
 };
-
-export default LoginForm;

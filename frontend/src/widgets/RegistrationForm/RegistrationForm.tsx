@@ -22,6 +22,7 @@ export const RegistrationForm = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
+    console.log("hello");
     if (!name || !email || !password) {
       return alert("Все поля обязательны к заполнению");
     }
