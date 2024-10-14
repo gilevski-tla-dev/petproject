@@ -9,6 +9,7 @@ import { RegistrationPage } from "../../pages/Registration";
 import { LoginPage } from "../../pages/Login";
 import { Layout } from "../../pages/Layout";
 import { ProfilePage } from "../../pages/Profile";
+import ProtectedRoute from "../../app/routers/ProtectedRoute";
 
 export const AppRouter: React.FC = () => {
   return (
@@ -16,20 +17,13 @@ export const AppRouter: React.FC = () => {
       <Routes>
         <Route path="/registration" element={<RegistrationPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/" element={<Navigate to="/registration" />} />
+        <Route path="/" element={<Navigate to="/login" />} />
 
-        {/* Защищённые маршруты внутри HomePage */}
-        <Route
-          path="/feed/*"
-          element={
-            <Layout>
-              <Routes>
-                <Route path="profile" element={<ProfilePage />} />
-                {/* Можно добавить и другие защищённые маршруты */}
-              </Routes>
-            </Layout>
-          }
-        />
+        {/* Защищенные маршруты */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/feed" element={<Layout />} />
+          <Route path="/profile" element={<ProfilePage />} />
+        </Route>
       </Routes>
     </Router>
   );

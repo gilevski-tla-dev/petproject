@@ -16,7 +16,7 @@ func GenerateAccessToken(userID uint) (string, error) {
 	claims := &Claims{
 		UserID: userID,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Minute * 15).Unix(),
+			ExpiresAt: time.Now().Add(time.Minute * 1).Unix(),
 			IssuedAt:  time.Now().Unix(),
 		},
 	}
@@ -28,7 +28,7 @@ func GenerateRefreshToken(userID uint) (string, error) {
 	claims := &Claims{
 		UserID: userID,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 24 * 7).Unix(),
+			ExpiresAt: time.Now().Add(time.Minute * 3).Unix(),
 			IssuedAt:  time.Now().Unix(),
 		},
 	}
