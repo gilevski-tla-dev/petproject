@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
-import { selectIsAuthenticated } from "../../store/AuthSlice";
+import { selectIsAuthenticated } from "../../store/authSlice";
 
 const ProtectedRoute: React.FC = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import { RootState } from "./store"; // Импортируйте тип RootState
+import { RootState } from "./store";
+import apiClient from "../app/ApiClient/axiosInstance";
 
 interface AuthState {
   accessToken: string | null;
@@ -14,16 +14,15 @@ const initialState: AuthState = {
   isAuthenticated: !!localStorage.getItem("accessToken"),
 };
 
-// Асинхронное обновление токена
+// Asynchronous token refresh
 export const refreshAccessToken = createAsyncThunk(
   "auth/refreshAccessToken",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.post("http://localhost:3001/api/refresh", {
+      const response = await apiClient.post(`/refresh`, {
         refreshToken: localStorage.getItem("refreshToken"),
       });
       const { accessToken } = response.data;
-
       localStorage.setItem("accessToken", accessToken);
       return accessToken;
     } catch (error) {
@@ -45,7 +44,6 @@ const authSlice = createSlice({
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
       state.isAuthenticated = true;
-
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
     },
@@ -53,7 +51,6 @@ const authSlice = createSlice({
       state.accessToken = null;
       state.refreshToken = null;
       state.isAuthenticated = false;
-
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
     },
@@ -71,7 +68,6 @@ const authSlice = createSlice({
 
 export const { setTokens, logout } = authSlice.actions;
 
-// Добавляем и экспортируем селектор
 export const selectIsAuthenticated = (state: RootState) =>
   state.auth.isAuthenticated;
 

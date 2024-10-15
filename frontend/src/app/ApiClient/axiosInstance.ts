@@ -1,20 +1,28 @@
 import axios from "axios";
 import { store } from "../../store/store";
-import { logout } from "../../store/AuthSlice";
+import { logout } from "../../store/authSlice";
 
+// Define base URL
 export const API_BASE_URL = "http://localhost:3001/api";
+
+// Create axios instance
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// Interceptor for adding accessToken to each request
-apiClient.interceptors.request.use((config) => {
-  const accessToken = localStorage.getItem("accessToken");
-  if (accessToken && config.url !== "/sign_in") {
-    config.headers.Authorization = `Bearer ${accessToken}`;
+// Interceptor to add accessToken to each request
+apiClient.interceptors.request.use(
+  (config) => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken && config.url !== "/sign_in") {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-  return config;
-});
+);
 
 // Function to refresh accessToken
 const refreshAccessToken = async () => {
@@ -27,12 +35,12 @@ const refreshAccessToken = async () => {
     localStorage.setItem("accessToken", newAccessToken);
     return newAccessToken;
   } catch (error) {
-    console.error(error);
-    throw new Error("Failed to refresh access token");
+    console.error("Failed to refresh access token", error);
+    throw error;
   }
 };
 
-// Interceptor for handling errors and refreshing tokens
+// Interceptor to handle errors and refresh tokens
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {

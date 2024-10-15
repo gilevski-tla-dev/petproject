@@ -4,7 +4,7 @@ import { InputWithLabel } from "../../shared/ui/input";
 import { Link } from "../../shared/ui/link";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../store/hooks";
-import { setTokens } from "../../store/AuthSlice";
+import { setTokens } from "../../store/authSlice";
 import api from "../../app/ApiClient/axiosInstance";
 
 export const LoginForm = () => {
