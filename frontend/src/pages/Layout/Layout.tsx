@@ -10,7 +10,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="flex flex-col">
       <Header />
-      <div className="flex w-[1024px] shadow-layout h-screen self-center mt-header-height">
+      <div className="flex max-w-[1024px] w-full shadow-layout h-screen self-center mt-header-height">
         {children ? children : <Outlet />}
       </div>
     </div>

@@ -18,7 +18,7 @@ export const AppRouter: React.FC = () => {
       <Routes>
         <Route path="/registration" element={<RegistrationPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/" element={<Navigate to="/feed" />} />
 
         {/* Защищенные маршруты с использованием Layout */}
         <Route element={<ProtectedRoute />}>

@@ -1,3 +1,4 @@
+// routes/routes.go
 package routes
 
 import (
@@ -12,7 +13,7 @@ import (
 func SetupRoutes(db *gorm.DB) *gin.Engine {
 	r := gin.Default()
 
-	// Настройка CORS с разрешением заголовка Authorization
+	// Configure CORS with Authorization header support.
 	corsConfig := cors.Config{
 		AllowOrigins:     []string{"http://localhost:5173"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -30,6 +31,7 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 		api.POST("/sign_in", handlers.SignIn(db))
 		api.POST("/refresh", handlers.RefreshToken(db))
 		api.GET("/get_profile", middleware.AuthMiddleware(), handlers.GetProfile(db))
+		api.PUT("/edit_profile", middleware.AuthMiddleware(), handlers.EditProfile(db))
 	}
 
 	return r
