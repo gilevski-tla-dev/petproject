@@ -7,7 +7,7 @@ export const ProfilePage = () => {
     error,
     isLoading,
   } = useQuery(["profile"], getProfile, {
-    staleTime: 1000 * 10,
+    staleTime: 1000,
   });
 
   if (isLoading) {
