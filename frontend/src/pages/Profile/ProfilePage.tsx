@@ -1,7 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { getProfile } from "../../features/getProfile/getProfile";
+import { useState } from "react";
 
 export const ProfilePage = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setIsModalVisible((prev) => !prev);
+  };
   const {
     data: profile,
     error,
