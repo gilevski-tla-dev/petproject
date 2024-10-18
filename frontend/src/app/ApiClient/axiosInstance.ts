@@ -2,15 +2,12 @@ import axios from "axios";
 import { store } from "../../store/store";
 import { logout } from "../../store/authSlice";
 
-// Define base URL
 export const API_BASE_URL = "http://localhost:3001/api";
 
-// Create axios instance
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// Interceptor to add accessToken to each request
 apiClient.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("accessToken");
@@ -24,7 +21,6 @@ apiClient.interceptors.request.use(
   }
 );
 
-// Function to refresh accessToken
 const refreshAccessToken = async () => {
   try {
     const refreshToken = localStorage.getItem("refreshToken");
@@ -40,7 +36,6 @@ const refreshAccessToken = async () => {
   }
 };
 
-// Interceptor to handle errors and refresh tokens
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
