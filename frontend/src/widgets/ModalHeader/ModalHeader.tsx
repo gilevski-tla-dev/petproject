@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import profileIcon from "../../assets/path.svg";
 import moonIcon from "../../assets/Moon.svg";
 import settingsIcon from "../../assets/settingsIcon.svg";
@@ -5,7 +6,6 @@ import logoutIcon from "../../assets/logoutIcon.svg";
 import { logout } from "../../store/authSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { forwardRef } from "react";
 
 interface ModalHeaderProps {
   isVisible: boolean;
@@ -30,7 +30,7 @@ export const ModalHeader = forwardRef<HTMLDivElement, ModalHeaderProps>(
       <div
         ref={ref}
         className={`w-[212px] h-[150px] bg-white absolute top-[100%] right-0 shadow-xl rounded-b-2xl p-3 gap-1 flex flex-col
-          transition-all duration-200 transform ${
+          transition-all duration-300 ease-in-out transform ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           }`}
       >
@@ -49,7 +49,7 @@ export const ModalHeader = forwardRef<HTMLDivElement, ModalHeaderProps>(
           <img src={settingsIcon} alt="" className="ml-2" />
           <h3>Настройки</h3>
         </div>
-        <hr className="self-center w-full mt-1 mb-1 h-1 border-[1px] border-gray-300 " />
+        <hr className="self-center w-full mt-1 mb-1 h-1 border-[1px] border-gray-300" />
         <div
           className="flex gap-[10px] hover:bg-black/15 rounded-lg cursor-pointer"
           onClick={handleLogout}

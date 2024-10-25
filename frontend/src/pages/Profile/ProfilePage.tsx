@@ -1,28 +1,16 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getProfile } from "../../features/getProfile/getProfile";
-import { useState } from "react";
+import { EditModal } from "../../widgets/EditModal";
 
 export const ProfilePage = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const toggleModal = () => {
-    setIsModalVisible((prev) => !prev);
-  };
   const {
     data: profile,
     error,
     isLoading,
-  } = useQuery(["profile"], getProfile, {
-    staleTime: 1000,
-  });
+  } = useQuery(["profile"], getProfile, { staleTime: 1000 });
 
-  if (isLoading) {
-    return <div>Загрузка...</div>;
-  }
-
-  if (error) {
-    return <div>Ошибка получения данных профиля</div>;
-  }
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
 
   const {
     name = "Неизвестный пользователь",
@@ -32,14 +20,30 @@ export const ProfilePage = () => {
 
   const base64Image = `data:image/jpeg;base64,${image}`;
 
+  const handleEditClick = () => {
+    setIsEditModalVisible(true);
+  };
+
+  const closeEditModal = () => {
+    setIsEditModalVisible(false);
+  };
+
+  if (isLoading) {
+    return <div>Загрузка...</div>;
+  }
+
+  if (error) {
+    return <div>Ошибка получения данных профиля</div>;
+  }
+
   return (
     <div className="flex h-full flex-col w-full family-[Poppins]">
-      <div className="w-full bg-green-200 h-60"></div>
-      <div className="w-full h-60 flex">
-        <div className="ml-12">
-          <div className="w-52 h-52 rounded-full overflow-hidden -mt-24">
+      <div className="hidden md:block w-full bg-green-200 h-60"></div>
+      <div className="w-full h-96 md:h-60 flex flex-col md:flex-row items-center md:items-start">
+        <div className="md:ml-12 ml-0">
+          <div className="w-36 h-36 md:w-52 md:h-52 rounded-full overflow-hidden md:-mt-24 mt-6">
             <img
-              className="object-cover"
+              className="object-cover w-full h-full"
               src={
                 image
                   ? base64Image
@@ -48,13 +52,27 @@ export const ProfilePage = () => {
               alt="Profile"
             />
           </div>
-          <h1 className="font-extrabold text-[32px] text-h1">{name}</h1>
-          <h2 className="font-extrabold text-sm text-h1/70">{email}</h2>
+          <h1 className="font-extrabold text-[32px] text-h1 text-center md:text-left">
+            {name}
+          </h1>
+          <h2 className="font-extrabold text-sm text-h1/70 text-center md:text-left">
+            {email}
+          </h2>
         </div>
-        <button className="ml-auto rounded-[50px] border border-gray-500 w-[137px] h-[48px] font-medium text-sm text-h1 mt-[47px] mr-7">
+        <button
+          className="md:ml-auto rounded-lg md:rounded-[50px] border border-gray-500 w-4/5 h-8 md:w-[137px] md:h-[48px] font-medium text-sm text-h1 mt-3 md:mt-[47px] md:mr-7"
+          onClick={handleEditClick}
+        >
           Редактировать
         </button>
       </div>
+      {isEditModalVisible && (
+        <EditModal
+          closeModal={closeEditModal}
+          initialName={name}
+          initialEmail={email}
+        />
+      )}
     </div>
   );
 };
